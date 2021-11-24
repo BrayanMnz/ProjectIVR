@@ -27,16 +27,17 @@ voiceServer.listen(async(req, res) => {
   // const speech = await res.gather({source: "speech"});
   // console.log(speech);
  //await res.say("You said " + speech);
-  await res.say(`Si crees que a Yehudy le gusta Carlitos, pulsa uno. `, { name: "es-US-Wavenet-B" });
+  await res.say(`Si crees que a Esdras le gusta su compañero Victor, pulsa uno. `, { name: "es-US-Wavenet-B" });
   //console.log("termino");
 
   const stream = await res.sgather({source: "dtmf"});
 
   stream.on("dtmf", digit => {
     console.log("digit: " + digit);
-    if( digit === 1){
-      res.say(`Has pulsado el uno, Yehudy es maricon. `, { name: "es-US-Wavenet-B" });
-    } else {res.say(`Has pulsado otro numero, Yehudy es macho alfa. `, { name: "es-US-Wavenet-B" }); }
+    res.say(`Has pulsado el uno, Esdras es maricon. `, { name: "es-US-Wavenet-B" });
+    // if(digit === 1){
+    //   res.say(`Has pulsado el uno, Esdras es maricon. `, { name: "es-US-Wavenet-B" });
+    // } else {res.say(`Has pulsado otro numero, Yehudy es macho alfa. `, { name: "es-US-Wavenet-B" }); }
     
     if (digit === "#") stream.close();
  });
