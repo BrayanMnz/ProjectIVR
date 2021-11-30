@@ -48,10 +48,12 @@ persona.then(function(result) {
     answ_1.on("dtmf",async digit => {
        value1 = digit;
        if(parseInt(digit) === 1){
+
+      await res.say('Hola '+nombrePersona+ '. PARA ESTA Y TODAS LAS PREGUNTAS DE LA ENCUESTA, SI DESEAS RESPONDER CON UN: SI. MARCA UNO.  SI TU RESPUESTA ES UN:  NO. MARCA EL CERO. ', { name: "es-ES-Standard-B" });  
          
        await res.say('Hola nuevamente '+nombrePersona+ '. Has presentado fiebre mayor a 38 grados los últimos dias ?', { name: "es-ES-Standard-B" }); 
       
-       await res.say("Si su respuesta es: SÍ. marque uno.  Si su respuesta es: NO.  Marque el cero" , { name: "es-ES-Standard-B"});
+      // await res.say("Si su respuesta es: SÍ. marque uno.  Si su respuesta es: NO.  Marque el cero" , { name: "es-ES-Standard-B"});
 
           const answ_2 = await res.sgather({source: "dtmf"});
 
@@ -67,7 +69,48 @@ persona.then(function(result) {
               console.log('no le dio fiebre');
             }
 
-          });
+          }); 
+
+         
+
+
+                      await res.say('Has presentado dolor de garganta en los últimos dias ?', { name: "es-ES-Standard-B" }); 
+                   
+                          const answ_3 = await res.sgather({source: "dtmf"});
+                
+                          answ_3.on("dtmf", async digit => { 
+                
+                            console.log("digit: " + digit);
+                
+                            if(parseInt(digit) === 1){ 
+                
+                                console.log('DOLOR DE GARGANTA');
+                            } else if(parseInt(digit) === 0){
+                
+                              console.log('NO LE DOLIÓ');
+                            }
+                
+                          }); 
+
+
+
+                          await res.say('Has presentado TOS en los últimos dias ?', { name: "es-ES-Standard-B" }); 
+                   
+                          const answ_4 = await res.sgather({source: "dtmf"});
+                
+                          answ_4.on("dtmf", async digit => { 
+                
+                            console.log("digit: " + digit);
+                
+                            if(parseInt(digit) === 1){ 
+                
+                                console.log('TOS');
+                            } else if(parseInt(digit) === 0){
+                
+                              console.log('NO LE DIO TOS');
+                            }
+                
+                          }); 
 
       
       }
@@ -101,6 +144,31 @@ persona.then(function(result) {
 
 
 
+
+
+
+async function askQuestion(TextToAsk, symptom, res ) {
+  
+  await res.say(TextToAsk, { name: "es-ES-Standard-B" }); 
+                   
+  const answ_3 = await res.sgather({source: "dtmf"});
+
+  answ_3.on("dtmf", async digit => { 
+
+  console.log("digit: " + digit);
+
+  if(parseInt(digit) === 1){ 
+
+      console.log('Síntoma --> '+symptom +' - '+true);
+  } else if(parseInt(digit) === 0){
+
+    console.log('Síntoma --> '+symptom +' - '+false);
+  }
+
+}); 
+
+}
+ 
 
 
 

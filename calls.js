@@ -12,9 +12,8 @@ const callManager = new Fonos.CallManager({
 callManager.call({
  from: "9842753579",
  to: "18298580570",
-  // to: "18295690742",
-//to: "18096969966",
- webhook: "http://0edb-179-52-111-205.ngrok.io",
+
+ webhook: "http://9ea6-152-0-233-69.ngrok.io",
  ignoreE164Validation: true
 })
 .then(console.log)
