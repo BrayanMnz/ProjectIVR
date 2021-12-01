@@ -13,7 +13,7 @@ callManager.call({
  from: "9842753579",
  to: "18298580570",
 
- webhook: "http://9ea6-152-0-233-69.ngrok.io",
+ webhook: "http://f507-152-0-233-69.ngrok.io",
  ignoreE164Validation: true
 })
 .then(console.log)

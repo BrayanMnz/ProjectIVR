@@ -22,7 +22,28 @@ const persona = main.selectPersonas();
 // Set the server to use the speech APIS
 voiceServer.use(new GoogleTTS(speechConfig));
 voiceServer.use(new GoogleASR(speechConfig));
-let value1 = 0;
+
+
+async function handler (request, response, verb) {
+  await response.answer();
+  const digits = await response.gather({source: "dtmf,speech", numDigits: 1});
+ // console.log("digits: " + digits);
+
+ switch(digits) {
+  case '1':
+    return true;
+
+  case '0':
+    return false;
+    
+  default:
+    await response.say('Ha insertado una respuesta incorrecta. Las respuestas válidas son:  UNO para responder con SÍ. Y CERO para responder con NO.', { name: "es-ES-Standard-B" });
+
+    await response.say(verb, {name: "es-ES-Standard-B"});
+    return await handler(request,response, verb); 
+}
+  
+}
 
 
 persona.then(function(result) {
@@ -40,102 +61,69 @@ persona.then(function(result) {
    
     await res.say("Hola, esta llamada corresponde con una encuesta para conocer el estado de salud luego de recibir su vacuna contra el COVID 19. " , { name: "es-ES-Standard-B"});
 
-    await res.say("Es la persona respondiendo esta encuesta el ciudadano "+nombrePersona , { name: "es-ES-Standard-B"});
-    await res.say("Si su respuesta es SÍ. marque uno.  Si es otra persona asistiendo al ciudadano "+nombrePersona + ". Marque el cero" , { name: "es-ES-Standard-B"});
-
-    const answ_1 = await res.sgather({source: "dtmf"});
-
-    answ_1.on("dtmf",async digit => {
-       value1 = digit;
-       if(parseInt(digit) === 1){
-
-      await res.say('Hola '+nombrePersona+ '. PARA ESTA Y TODAS LAS PREGUNTAS DE LA ENCUESTA, SI DESEAS RESPONDER CON UN: SI. MARCA UNO.  SI TU RESPUESTA ES UN:  NO. MARCA EL CERO. ', { name: "es-ES-Standard-B" });  
-         
-       await res.say('Hola nuevamente '+nombrePersona+ '. Has presentado fiebre mayor a 38 grados los últimos dias ?', { name: "es-ES-Standard-B" }); 
-      
-      // await res.say("Si su respuesta es: SÍ. marque uno.  Si su respuesta es: NO.  Marque el cero" , { name: "es-ES-Standard-B"});
-
-          const answ_2 = await res.sgather({source: "dtmf"});
-
-          answ_2.on("dtmf", async digit => { 
-
-            console.log("digit: " + digit);
-
-            if(parseInt(digit) === 1){ 
-
-                console.log('LE DIO FIEBRE');
-            } else if(parseInt(digit) === 0){
-
-              console.log('no le dio fiebre');
-            }
-
-          }); 
-
-         
-
-
-                      await res.say('Has presentado dolor de garganta en los últimos dias ?', { name: "es-ES-Standard-B" }); 
-                   
-                          const answ_3 = await res.sgather({source: "dtmf"});
-                
-                          answ_3.on("dtmf", async digit => { 
-                
-                            console.log("digit: " + digit);
-                
-                            if(parseInt(digit) === 1){ 
-                
-                                console.log('DOLOR DE GARGANTA');
-                            } else if(parseInt(digit) === 0){
-                
-                              console.log('NO LE DOLIÓ');
-                            }
-                
-                          }); 
-
-
-
-                          await res.say('Has presentado TOS en los últimos dias ?', { name: "es-ES-Standard-B" }); 
-                   
-                          const answ_4 = await res.sgather({source: "dtmf"});
-                
-                          answ_4.on("dtmf", async digit => { 
-                
-                            console.log("digit: " + digit);
-                
-                            if(parseInt(digit) === 1){ 
-                
-                                console.log('TOS');
-                            } else if(parseInt(digit) === 0){
-                
-                              console.log('NO LE DIO TOS');
-                            }
-                
-                          }); 
-
-      
-      }
+    ciudadano = "Es la persona respondiendo esta encuesta el ciudadano "+nombrePersona;
+    await res.say(ciudadano+ `.  Si su respuesta es SÍ. marque uno.  Si es otra persona asistiendo al ciudadano `+nombrePersona +`. Marque el cero `, { name: "es-ES-Standard-B"});
+    const answ_1 = await handler(req,res, ciudadano);
+    console.log('ES LA PERSONA -->'+answ_1);
      
-      // else if(parseInt(value1) === 0) { res.say('entré aquí', { name: "es-ES-Standard-B" });  }
+
+    fiebre = 'Has presentado fiebre mayor a 38 grados los últimos dias ?';
+    await res.say('Hola '+nombrePersona+ `. PARA ESTA Y TODAS LAS PREGUNTAS DE LA ENCUESTA, SI DESEAS RESPONDER CON UN: SI. MARCA UNO.  SI TU RESPUESTA ES UN:  NO. MARCA EL CERO.` + fiebre, { name: "es-ES-Standard-B" }); 
+    const answ_2 = await handler(req,res,fiebre);
+    console.log('FIEBRE -->'+answ_2);
+
+    garganta = 'Has presentado dolor de garganta en los últimos dias ?';
+    await res.say(garganta, { name: "es-ES-Standard-B" }); 
+    const answ_3 = await handler(req,res,garganta);
+    console.log('GARGANTA -->'+answ_3);
+   
+    tos = 'Has presentado TOS en los últimos dias ?';
+    await res.say(tos, { name: "es-ES-Standard-B" });
+    const answ_4 = await handler(req,res,tos);
+    console.log('TOS -->'+answ_4);
 
 
-    });
 
+    secrecion = 'Has presentado Secreción Nasal en los últimos dias ?';
+    await res.say(secrecion, { name: "es-ES-Standard-B" });
+    const answ_5 = await handler(req,res,secrecion);
+    console.log('SECRECION NASAL -->'+answ_5);
+
+
+    breath = 'Has presentado DIFICULTAD PARA RESPIRAR en los últimos dias ?';
+    await res.say(breath, { name: "es-ES-Standard-B" });
+    const answ_6 = await handler(req,res,breath);
+    console.log('DIFICULTAD PARA RESPIRAR -->'+answ_6);
+
+    vomito = 'Has presentado vomitos en los últimos dias ?';
+    await res.say(vomito, { name: "es-ES-Standard-B" });
+    const answ_7 = await handler(req,res,vomito);
+    console.log('VOMITOS -->'+answ_7);
+
+    nausea = 'Has presentado náuseas en los últimos dias ?';
+    await res.say(nausea, { name: "es-ES-Standard-B" });
+    const answ_8 = await handler(req,res,nausea);
+    console.log('NAUSEAS -->'+answ_8);
+
+    diarrea = 'Has presentado diarrea en los últimos dias ?'
+    await res.say(diarrea, { name: "es-ES-Standard-B" });
+    const answ_9 = await handler(req,res,diarrea);
+    console.log('DIARREA -->'+answ_9);
+
+    hospit = `A continuación tendrá una serie de preguntas relacionado con su cuadro clínico
+    .   Ha sido usted hospitalizado?`;
+    await res.say(hospit, { name: "es-ES-Standard-B" });
+    const answ_10 = await handler(req,res,hospit);
+    console.log('HOSPITALIZADO -->'+answ_10);
     
 
-    
-      
-      if (value1 === "#") answ_1.close();
 
-    //console.log("termino"); estrellas
+    
+     
   
-    
-  
-    
-  
-  
-   // handler(req,res);
-    
-   // await res.hangup();
+
+
+   await res.hangup();
   });
 
 
@@ -169,20 +157,3 @@ async function askQuestion(TextToAsk, symptom, res ) {
 
 }
  
-
-
-
-
-async function handler (request, response) {
-  await response.answer();
-  const stream = await response.sgather({source: "dtmf,speech"});
-
-  stream.on("transcript", (text, isFinal) => {
-     console.log("transcript: %s", text);
-  })
-
-  stream.on("dtmf", digit => {
-     console.log("digit: " + digit);
-     if (digit === "#") stream.close();
-  })
-}
