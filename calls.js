@@ -9,12 +9,18 @@ const callManager = new Fonos.CallManager({
 //  1. Update the from to look exactly as the Number you added 
 //  2. Use an active phone or mobile
 //  3. Replace the webhook with the one from your Ngrok
-callManager.call({
- from: "9842753579",
- to: "18298580570",
 
- webhook: "http://fabf-190-80-246-255.ngrok.io",
+function call(phone) {
+  callManager.call({
+ from: "9842753579",
+ to: phone,
+
+ webhook: "http://4ee2-152-0-224-16.ngrok.io",
  ignoreE164Validation: true
 })
 .then(console.log)
-.catch(console.error);
+.catch(console.error); }
+
+call();
+
+exports.call = call;

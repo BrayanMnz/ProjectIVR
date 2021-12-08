@@ -2,6 +2,7 @@
 const { QueryTypes } = require('sequelize');
 const db = require('./models/index');
 const persona = require('./models/persona');
+const call = require('./calls');
 
 
 async function selectPersonas(){
@@ -25,6 +26,16 @@ async function insertSurvey(persona, objeto) {
 
 }
 
+async function selectPhone(persona){
+        
+        const movilQuery = `select C.movil_contacto  from Persona P join contacto C on C.id_contacto = P.contacto and P.id_persona = '${persona.id_persona}';` ;
+
+                const phone = await db.sequelize.query(movilQuery, {
+                        type: QueryTypes.SELECT
+                      });
+                
+                return phone; }
+
 
 
 
@@ -46,16 +57,21 @@ personas.then(function(result) {
                         "garganta": false
                 }
 
-                console.log(auxPersona.nombrecompleto_persona);
-                object.diarrea = true;
+                // console.log(auxPersona.nombrecompleto_persona);
+                // object.diarrea = true;
 
-                // console.log(object);
-                // console.log(' ');
+                // // console.log(object);
+                // // console.log(' ');
 
-                insertSurvey(auxPersona, object).then(function(result) {
-                        console.log(result);
+                selectPhone(auxPersona).then(result => { 
+                
+                console.log(result[0].movil_contacto.replace(/-/g,''))
+        });
+
+                // insertSurvey(auxPersona, object).then(function(result) {
+                //         console.log(result);
                         
-                }).catch(error => console.log('error', error));
+                // }).catch(error => console.log('error', error));
                 
                 
         })
@@ -66,5 +82,6 @@ personas.then(function(result) {
 
 
 exports.selectPersonas = selectPersonas;
+exports.selectPhone = selectPhone;
 
 exports.insertSurvey = insertSurvey;
