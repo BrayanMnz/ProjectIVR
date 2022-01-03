@@ -11,11 +11,11 @@ const callManager = new Fonos.CallManager({
 //  2. Use an active phone or mobile
 //  3. Replace the webhook with the one from your Ngrok
 
-async function call(phone, name) {
+async function call(phone, persona) {
   await callManager.call({
     from: "9842753579",
     to: phone,
-    metadata: { name },
+    metadata: {persona },
     ignoreE164Validation: true,
   });
 }

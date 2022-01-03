@@ -15,16 +15,10 @@ async function selectPersonas() {
   return personas;
 }
 
-async function insertSurvey(persona, objeto) {
-  const sql = `INSERT INTO public.survey (fiebre, uci, diarrea, garganta,  hospitalizado, nausea,  respirar, secrecionnasal, tos, persona) VALUES('${objeto.fiebre}', '${objeto.uci}', '${objeto.diarrea}', '${objeto.garganta}', '${objeto.hospitalizado}', '${objeto.nausea}', '${objeto.respirar}', '${objeto.secrecionnasal}', '${objeto.tos}', '${persona.id_persona}');`;
 
-  return db.sequelize.query(sql, {
-    type: QueryTypes.INSERT,
-  });
-}
 
-async function selectPhone(persona) {
-  const movilQuery = `select C.movil_contacto  from Persona P join contacto C on C.id_contacto = P.contacto and P.id_persona = '${persona.id_persona}';`;
+async function selectPhone(auxpersona) {
+  const movilQuery = `select C.movil_contacto  from Persona P join contacto C on C.id_contacto = P.contacto and P.id_persona = '${auxpersona.id_persona}';`;
 
   const phone = await db.sequelize.query(movilQuery, {
     type: QueryTypes.SELECT,
@@ -51,7 +45,7 @@ async function funcion(list) {
 
     await call.call(
       phone[0].movil_contacto.replace(/-/g, ""),
-      auxPersona.nombrecompleto_persona
+      auxPersona
     );
 
     // insertSurvey(auxPersona, object).then(function(result) {
@@ -71,4 +65,3 @@ personas.then(async function (result) {
 exports.selectPersonas = selectPersonas;
 exports.selectPhone = selectPhone;
 
-exports.insertSurvey = insertSurvey;
