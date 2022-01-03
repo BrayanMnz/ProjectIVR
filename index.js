@@ -62,6 +62,12 @@ async function handler(request, response, verb, option) {
 async function insertSurvey(persona, objeto) {
   const sql = `INSERT INTO public.survey (fiebre, uci, diarrea, garganta,  hospitalizado, nausea,  respirar, secrecionnasal, tos, persona) VALUES('${objeto.fiebre}', '${objeto.uci}', '${objeto.diarrea}', '${objeto.garganta}', '${objeto.hospitalizado}', '${objeto.nausea}', '${objeto.respirar}', '${objeto.secrecionnasal}', '${objeto.tos}', '${persona.id_persona}');`;
 
+  const sqlupdate = `UPDATE public.persona SET encuestado=true WHERE id_persona=:idvar`
+  db.sequelize.query(sqlupdate, {
+    replacements: { idvar: persona.id_persona},
+    type: QueryTypes.UPDATE,
+  })
+
   return db.sequelize.query(sql, {
     type: QueryTypes.INSERT,
   });
