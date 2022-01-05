@@ -4,15 +4,14 @@ const persona = require("./models/persona");
 const call = require("./calls");
 
 async function selectPersonas() {
-  const personas = await db.sequelize.query(
+  return db.sequelize.query(
     "select * from PERSONA P where P.primeradosis = true and encuestado = false and ivr = true;",
     {
       type: QueryTypes.SELECT,
       raw: true,
     }
-  );
+  )
 
-  return personas;
 }
 
 
@@ -55,6 +54,7 @@ async function funcion(list) {
   }
 }
 
+async function mainFunction() {
 const personas = selectPersonas();
 
 personas.then(async function (result) {
@@ -62,6 +62,11 @@ personas.then(async function (result) {
   console.log(JSON.stringify(result));
 });
 
+}
+
+
+//mainFunction();
 exports.selectPersonas = selectPersonas;
 exports.selectPhone = selectPhone;
+exports.mainFunction = mainFunction;
 

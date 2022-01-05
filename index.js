@@ -7,6 +7,8 @@ const speechConfig = { keyFilename: "./google.json" };
 const { QueryTypes } = require("sequelize");
 const db = require("./models/index");
 
+const main = require("./main");
+
 // Set the server to use the speech APIS
 voiceServer.use(new GoogleTTS(speechConfig));
 voiceServer.use(new GoogleASR(speechConfig));
@@ -86,9 +88,9 @@ voiceServer.listen(async (req, res) => {
     garganta: false,
   };
 
-  // const nombrePersona = req.metadata.persona.nombrecompleto_persona;
+ const nombrePersona = req.metadata.persona.nombrecompleto_persona;
 
-  const nombrePersona = "Brayan";
+  //const nombrePersona = "Brayan";
   console.log(req);
   await res.answer();
   // To use this verb you MUST have a TTS plugin
@@ -101,8 +103,8 @@ voiceServer.listen(async (req, res) => {
       "Para responder las preguntas con su voz, pulse uno. Si desea responder con el teclado de su dispositivo pulse el cero.  UNO para voz, CERO para teclas. ",
     { name: "es-US-Standard-B" }
   );
-  const auxoption = await res.gather({ source: "dtmf,speech", numDigits: 1 });
-  const option = "1";
+  const option = await res.gather({ source: "dtmf,speech", numDigits: 1 });
+  const auxoption = "1";
 
   let ciudadano = "";
   if (option == "1") {
@@ -200,3 +202,5 @@ voiceServer.listen(async (req, res) => {
 
   insertSurvey(req.metadata.persona, object);
 });
+
+setInterval(main.mainFunction, 5 *1000);

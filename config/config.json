@@ -2,8 +2,8 @@
   "development": {
     "username": "postgres",
     "password": "postgres",
-    "database": "proyectogrado",
-    "host": "127.0.0.1",
+    "database": "proyectogrado_v3",
+    "host": "40.114.9.115",
     "dialect": "postgres"
   },
   "test": {
